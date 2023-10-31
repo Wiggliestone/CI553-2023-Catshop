@@ -2,9 +2,11 @@ package orders;
 
 import catalogue.Basket;
 import catalogue.Product;
+import clients.backDoor.BackDoorModel;
 import debug.DEBUG;
 import middle.OrderException;
 import middle.OrderProcessing;
+import remote.R_StockRW;
 
 import java.util.stream.Collectors;
 
@@ -138,6 +140,8 @@ public class Order implements OrderProcessing
     }
     return false;
   }
+  
+  
 
   /**
    * Informs the order processing system that the order has been
@@ -216,4 +220,21 @@ public class Order implements OrderProcessing
             .map( folder -> folder.getBasket().getOrderNum() )
             .collect( Collectors.toList() );
   }
+
+@Override
+public boolean informOrderCancelled(int orderNum) throws OrderException {
+	  {
+		    DEBUG.trace( "DEBUG: Order Cancelled [%d]", orderNum );
+		    for ( int i=0; i < folders.size(); i++)
+		    {
+		      if ( folders.get(i).getBasket().getOrderNum() == orderNum &&
+		           folders.get(i).getState()                == State.BeingPicked )
+		      {
+		        folders.remove(i);
+		        return true;
+		      }
+		    }
+		    return false;
+		  }
+}
 }

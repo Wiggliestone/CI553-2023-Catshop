@@ -2,6 +2,8 @@ package clients.backDoor;
 
 import middle.MiddleFactory;
 import middle.StockReadWriter;
+import sounds.PlaySound;
+import sounds.Sound;
 
 import javax.swing.*;
 import java.awt.*;
@@ -61,7 +63,7 @@ public class BackDoorView implements Observer
 
     theBtQuery.setBounds( 16, 25+60*0, 80, 40 );    // Buy button 
     theBtQuery.addActionListener(                   // Call back code
-      e -> cont.doQuery( theInput.getText() ) );
+      e -> cont.doQuery( theInput.getText()  )  );
     cp.add( theBtQuery );                           //  Add to canvas
 
     theBtRStock.setBounds( 16, 25+60*1, 80, 40 );   // Check Button

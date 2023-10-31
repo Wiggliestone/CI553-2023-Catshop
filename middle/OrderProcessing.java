@@ -31,4 +31,7 @@ public interface OrderProcessing
          
   public Map<String,List<Integer>> getOrderState() // Display
          throws OrderException;
+
+  public boolean informOrderCancelled(int orderNum) // Picker
+  		throws OrderException;
 }

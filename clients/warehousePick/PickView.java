@@ -3,6 +3,7 @@ package clients.warehousePick;
 import catalogue.Basket;
 import middle.MiddleFactory;
 import middle.OrderProcessing;
+import middle.StockException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +19,7 @@ import java.util.Observer;
 public class PickView implements Observer
 {
   private static final String PICKED = "Picked";
+  private static final String CANCEL = "Cancel";
 
   private static final int H = 300;       // Height of window pixels
   private static final int W = 400;       // Width  of window pixels
@@ -26,7 +28,8 @@ public class PickView implements Observer
   private final JTextArea   theOutput  = new JTextArea();
   private final JScrollPane theSP      = new JScrollPane();
   private final JButton     theBtPicked= new JButton( PICKED );
- 
+  private final JButton     theBtCancel= new JButton( CANCEL );
+
   private OrderProcessing theOrder     = null;
   
   private PickController cont= null;
@@ -58,7 +61,14 @@ public class PickView implements Observer
     theBtPicked.setBounds( 16, 25+60*0, 80, 40 );   // Check Button
     theBtPicked.addActionListener(                   // Call back code
       e -> cont.doPick() );
-    cp.add( theBtPicked );                          //  Add to canvas
+    cp.add( theBtPicked );   
+    
+    theBtCancel.setBounds( 16, 25+60*1, 80, 40 );   // Check Button
+    theBtCancel.addActionListener(                   // Call back code
+      e -> {
+		cont.doCancel();
+	} );
+    cp.add( theBtCancel );  //  Add to canvas
 
     theAction.setBounds( 110, 25 , 270, 20 );       // Message area
     theAction.setText( "" );                        // Blank

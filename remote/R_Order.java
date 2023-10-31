@@ -67,4 +67,13 @@ public class      R_Order
     return aOrder.getOrderState();
   }
 
+@Override
+public boolean informOrderCancelled(int orderNum)
+        throws RemoteException, OrderException
+ {
+     return aOrder.informOrderCancelled(orderNum);
+ }
 }
+ 
+
+

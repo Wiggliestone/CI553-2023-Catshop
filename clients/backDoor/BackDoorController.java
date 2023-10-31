@@ -1,5 +1,7 @@
 package clients.backDoor;
 
+import sounds.PlaySound;
+import sounds.Sound;
 
 /**
  * The BackDoor Controller
@@ -27,6 +29,7 @@ public class BackDoorController
    */
   public void doQuery( String pn )
   {
+	PlaySound.playSound(Sound.Click);
     model.doQuery(pn);
   }
   
@@ -45,6 +48,7 @@ public class BackDoorController
    */
   public void doClear()
   {
+	PlaySound.playSound(Sound.Click);
     model.doClear();
   }
 

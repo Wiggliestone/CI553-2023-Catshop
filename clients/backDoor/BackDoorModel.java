@@ -7,6 +7,8 @@ import debug.DEBUG;
 import middle.MiddleFactory;
 import middle.StockException;
 import middle.StockReadWriter;
+import sounds.PlaySound;
+import sounds.Sound;
 
 import java.util.Observable;
 
@@ -120,10 +122,14 @@ public class BackDoorModel extends Observable
         theStock.addStock(pn, amount);          //  Re stock
         Product pr = theStock.getDetails(pn);   //  Get details
         theBasket.add(pr);                      //
-        theAction = "";                         // Display 
+        theAction = ""; 
+    	PlaySound.playSound(Sound.Confirmation);
+// Display 
       } else {                                  // F
         theAction =                             //  Inform Unknown
-          "Unknown product number " + pn;       //  product number
+          "Unknown product number " + pn;   
+    	PlaySound.playSound(Sound.Click);
+//  product number
       } 
     } catch( StockException e )
     {

@@ -1,11 +1,16 @@
 package clients.warehousePick;
 
 import catalogue.Basket;
+import catalogue.Product;
+import clients.backDoor.BackDoorModel;
 import debug.DEBUG;
 import middle.MiddleFactory;
 import middle.OrderException;
 import middle.OrderProcessing;
+import middle.StockException;
 import middle.StockReadWriter;
+import sounds.PlaySound;
+import sounds.Sound;
 
 import java.util.Observable;
 import java.util.concurrent.atomic.AtomicReference;
@@ -136,8 +141,12 @@ public class PickModel extends Observable
         theOrder.informOrderPicked( no );     //  Tell system
         theAction = "";                       //  Inform picker
         worker.free();                        //  Can pick some more
+    	PlaySound.playSound(Sound.Confirmation);
+
       } else {                                // F 
         theAction = "No order to pick";       //   Not picked order
+    	PlaySound.playSound(Sound.Click);
+
       }
       setChanged(); notifyObservers(theAction);
     }
@@ -146,6 +155,41 @@ public class PickModel extends Observable
       DEBUG.error( "PickModel.doPick()\n%s\n",//  should not
                             e.getMessage() ); //  happen
     }
+    setChanged(); notifyObservers(theAction);
+  }
+
+
+public void doCancel(){
+	
+    String theAction = "";
+    Basket basket =  theBasket.get();       // Basket being cancelled
+      if ( basket != null )                   // T
+      {
+    	for( Product pr : basket) {
+    		try {
+				theStock.addStock(pr.getProductNum(), pr.getQuantity());
+			} catch (StockException e) {
+				e.printStackTrace();
+			}
+    	}
+        int no = basket.getOrderNum();        //  Order no
+        theBasket.set( null );                //  Cancelled
+        try {
+			theOrder.informOrderCancelled( no );
+		} catch (OrderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}     //  Tell system
+        theAction = "";                       //  Inform picker
+        worker.free();                        //  Can pick some more
+    	PlaySound.playSound(Sound.Confirmation);
+
+      } else {                                // F 
+        theAction = "No order to cancel";       //   Not cancelled order
+    	PlaySound.playSound(Sound.Click);
+
+      }
+      setChanged(); notifyObservers(theAction);
     setChanged(); notifyObservers(theAction);
   }
 }

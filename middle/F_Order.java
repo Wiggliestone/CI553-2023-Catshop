@@ -117,6 +117,26 @@ public class F_Order implements OrderProcessing
       throw new OrderException( "Net: " + e.getMessage() );
     }
   }
+  
+  /**
+   * Informs the order processing system that the order has been
+   * cancelled 
+   */
+  
+  public synchronized boolean informOrderCancelled1( int orderNum )
+	         throws OrderException
+	  {
+	    DEBUG.trace("F_Order:informOrderCancelled()" );
+	    try
+	    {
+	      if ( aR_Order == null ) connect();
+	      return aR_Order.informOrderCancelled(orderNum);
+	    } catch ( Exception e )
+	    {
+	      aR_Order = null;
+	      throw new OrderException( "Net: " + e.getMessage() );
+	    }
+	  }
 
   /**
    * Informs the order processing system that the order has been
@@ -156,4 +176,10 @@ public class F_Order implements OrderProcessing
       throw new OrderException( "Net: " + e.getMessage() );
     }
   }
+
+@Override
+public boolean informOrderCancelled(int orderNum) throws OrderException {
+	// TODO Auto-generated method stub
+	return false;
+}
 }

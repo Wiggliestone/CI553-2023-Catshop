@@ -191,4 +191,19 @@ public class OrderX implements OrderProcessing
     return res;
   }
 
+@Override
+public boolean informOrderCancelled(int orderNum) throws OrderException {
+	
+    DEBUG.trace( "DEBUG: Order picked [%d]", orderNum );
+    for ( int i=0; i<theBeingPickedTray.size(); i++)
+    {
+      if ( theBeingPickedTray.get(i).getOrderNum() == orderNum )
+      {
+        Basket cancelled = theBeingPickedTray.remove(i);
+        return true;
+      }
+    }
+    return false;
+  }
+
 }

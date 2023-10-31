@@ -1,5 +1,6 @@
 package clients.warehousePick;
 
+import middle.StockException;
 
 /**
  * The BackDoor Controller
@@ -27,6 +28,10 @@ public class PickController
   public void doPick()
   {
     model.doPick();
+  }
+
+  public void doCancel(){
+	  model.doCancel();
   }
   
 }

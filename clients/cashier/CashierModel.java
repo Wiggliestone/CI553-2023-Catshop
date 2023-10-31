@@ -4,6 +4,8 @@ import catalogue.Basket;
 import catalogue.Product;
 import debug.DEBUG;
 import middle.*;
+import sounds.PlaySound;
+import sounds.Sound;
 
 import java.util.Observable;
 
@@ -58,6 +60,7 @@ public class CashierModel extends Observable
    */
   public void doCheck(String productNum )
   {
+	PlaySound.playSound(Sound.Click);
     String theAction = "";
     theState  = State.process;                  // State process
     pn  = productNum.trim();                    // Product no.
@@ -99,6 +102,7 @@ public class CashierModel extends Observable
    */
   public void doBuy()
   {
+	PlaySound.playSound(Sound.Click);
     String theAction = "";
     int    amount  = 1;                         //  & quantity
     try
@@ -144,8 +148,14 @@ public class CashierModel extends Observable
            theBasket.size() >= 1 )            // items > 1
       {                                       // T
         theOrder.newOrder( theBasket );       //  Process order
-        theBasket = null;                     //  reset
-      }                                       //
+        theBasket = null;  
+    	PlaySound.playSound(Sound.Purchase);
+//  reset
+      }  else {
+    	  
+      	PlaySound.playSound(Sound.Click);
+
+      }                                     //
       theAction = "Next customer";            // New Customer
       theState = State.process;               // All Done
       theBasket = null;

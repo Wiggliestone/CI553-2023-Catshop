@@ -28,5 +28,8 @@ public interface RemoteOrder_I extends Remote
          throws RemoteException, OrderException;
   public Map<String, List<Integer>> getOrderState() 
          throws  RemoteException, OrderException;
+public boolean informOrderCancelled(int orderNum)
+        throws RemoteException, OrderException;
+
 }
 

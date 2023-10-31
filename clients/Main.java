@@ -19,6 +19,9 @@ import clients.warehousePick.PickModel;
 import clients.warehousePick.PickView;
 import middle.LocalMiddleFactory;
 import middle.MiddleFactory;
+import sounds.PlaySound;
+import sounds.Sound;
+import sounds.PlaySound;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,7 +51,6 @@ class Main
   {
     //DEBUG.set(true); /* Lots of debug info */
     MiddleFactory mlf = new LocalMiddleFactory();  // Direct access
- 
     startCustomerGUI_MVC( mlf );
     if ( many ) 
      startCustomerGUI_MVC( mlf );

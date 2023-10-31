@@ -7,6 +7,8 @@ import middle.MiddleFactory;
 import middle.OrderProcessing;
 import middle.StockException;
 import middle.StockReader;
+import sounds.PlaySound;
+import sounds.Sound;
 
 import javax.swing.*;
 import java.util.Observable;
@@ -78,14 +80,20 @@ public class CustomerModel extends Observable
           pr.setQuantity( amount );             //   Require 1
           theBasket.add( pr );                  //   Add to basket
           thePic = theStock.getImage( pn );     //    product
+          PlaySound.playSound(Sound.Confirmation);
+
         } else {                                //  F
           theAction =                           //   Inform
             pr.getDescription() +               //    product not
-            " not in stock" ;                   //    in stock
+            " not in stock" ; 
+      		PlaySound.playSound(Sound.Click);
+//    in stock
         }
       } else {                                  // F
         theAction =                             //  Inform Unknown
-          "Unknown product number " + pn;       //  product number
+          "Unknown product number " + pn; 
+  		  PlaySound.playSound(Sound.Click);
+//  product number
       }
     } catch( StockException e )
     {
@@ -100,6 +108,7 @@ public class CustomerModel extends Observable
    */
   public void doClear()
   {
+	PlaySound.playSound(Sound.Click);
     String theAction = "";
     theBasket.clear();                        // Clear s. list
     theAction = "Enter Product Number";       // Set display

@@ -3,6 +3,8 @@ package clients.collection;
 import debug.DEBUG;
 import middle.MiddleFactory;
 import middle.OrderProcessing;
+import sounds.PlaySound;
+import sounds.Sound;
 
 import java.util.Observable;
 
@@ -59,11 +61,14 @@ public class CollectModel extends Observable
       {
         theAction = "";
         theOutput = "Collected order #" + orderNum;
+    	PlaySound.playSound(Sound.Confirmation);
       }
       else
       {
         theAction = "No such order to be collected : " + orderNumber;
         theOutput = "No such order to be collected : " + orderNumber;
+    	PlaySound.playSound(Sound.Click);
+     
       }
     } catch ( Exception e )
     {

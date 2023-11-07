@@ -70,6 +70,10 @@ class Main
   {
     JFrame  window = new JFrame();
     window.setTitle( "Customer Client MVC");
+    
+
+    // // Set the background color to black
+
     window.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
     Dimension pos = PosOnScrn.getPos();
     
@@ -106,7 +110,6 @@ class Main
   public void startBackDoorGUI_MVC(MiddleFactory mlf )
   {
     JFrame  window = new JFrame();
-
     window.setTitle( "BackDoor Client MVC");
     window.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
     Dimension pos = PosOnScrn.getPos();
@@ -172,5 +175,4 @@ class Main
     model.addObserver( view );       // Add observer to the model
     window.setVisible(true);         // Make window visible
   }
-
 }

@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Implements the Customer view.
@@ -23,6 +24,8 @@ public class CustomerView implements Observer
   {
     public static final String CHECK  = "Check";
     public static final String CLEAR  = "Clear";
+
+
   }
 
   private static final int H = 300;       // Height of window pixels
@@ -34,6 +37,8 @@ public class CustomerView implements Observer
   private final JScrollPane theSP      = new JScrollPane();
   private final JButton     theBtCheck = new JButton( Name.CHECK );
   private final JButton     theBtClear = new JButton( Name.CLEAR );
+  private final JButton     darkMode = new JButton( "☀" );
+
 
   private Picture thePicture = new Picture(80,80);
   private StockReader theStock   = null;
@@ -49,6 +54,7 @@ public class CustomerView implements Observer
   
   public CustomerView( RootPaneContainer rpc, MiddleFactory mf, int x, int y )
   {
+	AtomicBoolean isDarkMode = new AtomicBoolean(false);
     try                                             // 
     {      
       theStock  = mf.makeStockReader();             // Database Access
@@ -65,6 +71,7 @@ public class CustomerView implements Observer
     Font f = new Font("Monospaced",Font.PLAIN,12);  // Font f is
 
     theBtCheck.setBounds( 16, 25+60*0, 80, 40 );    // Check button
+    theBtCheck.setBackground(Color.BLACK);
     theBtCheck.addActionListener(                   // Call back code
       e -> cont.doCheck( theInput.getText() ) );
     cp.add( theBtCheck );                           //  Add to canvas
@@ -74,6 +81,23 @@ public class CustomerView implements Observer
       e -> cont.doClear() );
     cp.add( theBtClear );                           //  Add to canvas
 
+    
+    
+    darkMode.setBounds(0, 0, 20, 20);
+    darkMode.addActionListener(e -> {
+        if (isDarkMode.get()) {
+            //Switch to Light Mode
+            rpc.getContentPane().setBackground(Color.WHITE);
+            darkMode.setText("☀");
+        } else {
+            //Switch to Dark Mode
+            rpc.getContentPane().setBackground(Color.BLACK);
+            darkMode.setText("☾︎");
+        }
+        isDarkMode.set(!isDarkMode.get());
+    });
+    cp.add(darkMode);
+    
     theAction.setBounds( 110, 25 , 270, 20 );       // Message area
     theAction.setText( "" );                        //  Blank
     cp.add( theAction );                            //  Add to canvas
@@ -96,7 +120,8 @@ public class CustomerView implements Observer
     theInput.requestFocus();                        // Focus is here
   }
 
-   /**
+
+/**
    * The controller object, used so that an interaction can be passed to the controller
    * @param c   The controller
    */

@@ -58,13 +58,13 @@ public class CashierModel extends Observable
    * Check if the product is in Stock
    * @param productNum The product number
    */
-  public void doCheck(String productNum )
+  public void doCheck(String productNum, String amountChosen )
   {
 	PlaySound.playSound(Sound.Click);
     String theAction = "";
     theState  = State.process;                  // State process
     pn  = productNum.trim();                    // Product no.
-    int    amount  = 1;                         //  & quantity
+    int   amount  = Integer.valueOf(amountChosen);                         //  & quantity
     try
     {
       if ( theStock.exists( pn ) )              // Stock Exists?
@@ -82,8 +82,8 @@ public class CashierModel extends Observable
           theState = State.checked;             //   OK await BUY 
         } else {                                //  F
           theAction =                           //   Not in Stock
-            pr.getDescription() +" not in stock";
-        }
+                  pr.getDescription() +               //    product not
+                  " only " + pr.getQuantity() + " left in stock!";         }
       } else {                                  // F Stock exists
         theAction =                             //  Unknown
           "Unknown product number " + pn;       //  product no.
@@ -215,18 +215,15 @@ public void removeLast() {
       if ( theBasket != null &&
            theBasket.size() >= 1 )            // items > 1
       {                                       
-    	  theStock.addStock(theBasket.get(theBasket.size()-1).getProductNum(), 1);
+    	  theStock.addStock(theBasket.get(theBasket.size()-1).getProductNum(), theBasket.get(theBasket.size()-1).getQuantity());
     	  theBasket.remove(theBasket.size()-1);
     	  PlaySound.playSound(Sound.Click);
     	  setChanged();
     	  notifyObservers(theAction);
     	  
-//  reset
       }  else {
     	
- 
-      	PlaySound.playSound(Sound.Click);
-      	
+      	PlaySound.playSound(Sound.Click);      	
 
       }                                     
     } catch (StockException e) {

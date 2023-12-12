@@ -33,6 +33,7 @@ public class CustomerView implements Observer
 
   private final JLabel      theAction  = new JLabel();
   private final JTextField  theInput   = new JTextField();
+  private final JTextField  theInputNo = new JTextField();
   private final JTextArea   theOutput  = new JTextArea();
   private final JScrollPane theSP      = new JScrollPane();
   private final JButton     theBtCheck = new JButton( Name.CHECK );
@@ -54,7 +55,7 @@ public class CustomerView implements Observer
   
   public CustomerView( RootPaneContainer rpc, MiddleFactory mf, int x, int y )
   {
-	AtomicBoolean isDarkMode = new AtomicBoolean(false);
+	AtomicBoolean DarkMode = new AtomicBoolean(false);
     try                                             // 
     {      
       theStock  = mf.makeStockReader();             // Database Access
@@ -71,30 +72,35 @@ public class CustomerView implements Observer
     Font f = new Font("Monospaced",Font.PLAIN,12);  // Font f is
 
     theBtCheck.setBounds( 16, 25+60*0, 80, 40 );    // Check button
-    theBtCheck.setBackground(Color.BLACK);
+    theBtCheck.setBackground(Color.black);
+
     theBtCheck.addActionListener(                   // Call back code
-      e -> cont.doCheck( theInput.getText() ) );
+      e -> cont.doCheck( theInput.getText(),theInputNo.getText() ) );
     cp.add( theBtCheck );                           //  Add to canvas
 
     theBtClear.setBounds( 16, 25+60*1, 80, 40 );    // Clear button
     theBtClear.addActionListener(                   // Call back code
       e -> cont.doClear() );
     cp.add( theBtClear );                           //  Add to canvas
-
     
     
-    darkMode.setBounds(0, 0, 20, 20);
+    darkMode.setBounds(0, 0, 20, 20); 				//smaller button, in the corner
     darkMode.addActionListener(e -> {
-        if (isDarkMode.get()) {
-            //Switch to Light Mode
+        if (DarkMode.get()) {						//if dark mode is true
+            										//then it should switch to light mode
             rpc.getContentPane().setBackground(Color.WHITE);
+            setButtonTheme(Color.WHITE);			//all the backgrounds
+            setTextTheme(Color.BLACK);				//all the text
+
             darkMode.setText("☀");
         } else {
-            //Switch to Dark Mode
+            //Switch to dark mode
             rpc.getContentPane().setBackground(Color.BLACK);
+            setButtonTheme(Color.DARK_GRAY);
+            setTextTheme(Color.WHITE);
             darkMode.setText("☾︎");
         }
-        isDarkMode.set(!isDarkMode.get());
+        DarkMode.set(!DarkMode.get());
     });
     cp.add(darkMode);
     
@@ -102,9 +108,13 @@ public class CustomerView implements Observer
     theAction.setText( "" );                        //  Blank
     cp.add( theAction );                            //  Add to canvas
 
-    theInput.setBounds( 110, 50, 270, 40 );         // Product no area
+    theInput.setBounds( 110, 50, 120, 40 );         // Product no area
     theInput.setText("");                           // Blank
     cp.add( theInput );                             //  Add to canvas
+    
+    theInputNo.setBounds( 260, 50, 120, 40 );       // Input Area
+    theInputNo.setText("1");                        // 1
+    cp.add( theInputNo ); 
     
     theSP.setBounds( 110, 100, 270, 160 );          // Scrolling pane
     theOutput.setText( "" );                        //  Blank
@@ -116,9 +126,33 @@ public class CustomerView implements Observer
     cp.add( thePicture );                           //  Add to canvas
     thePicture.clear();
     
-    rootWindow.setVisible( true );                  // Make visible);
+    rootWindow.setVisible( true );                  // Make visible
     theInput.requestFocus();                        // Focus is here
   }
+
+
+private void setTextTheme(Color color) {
+	
+	  theAction.setForeground(color);
+	  theInput.setForeground(color);
+	  theOutput.setForeground(color);
+	  theSP.setForeground(color);
+	  theBtCheck.setForeground(color);
+	  theBtClear.setForeground(color);
+	  darkMode.setForeground(color);
+	  
+}
+
+
+private void setButtonTheme(Color color) {
+	  theAction.setBackground(color);
+	  theInput.setBackground(color);
+	  theOutput.setBackground(color);
+	  theSP.setBackground(color);
+	  theBtCheck.setBackground(color);
+	  theBtClear.setBackground(color);
+	  darkMode.setBackground(color);
+}
 
 
 /**

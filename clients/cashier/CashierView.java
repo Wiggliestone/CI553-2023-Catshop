@@ -92,7 +92,7 @@ public class CashierView implements Observer
     cp.add( theAction );                            //  Add to canvas
 
     theInput.setBounds( 110, 50, 120, 40 );         // Input Area
-    theInput.setText("");                           // Blank
+    theInput.setText("Product Number");                         
     cp.add( theInput );   
     
     theInputNo.setBounds( 260, 50, 120, 40 );       // Input Area

@@ -64,36 +64,44 @@ public class CashierModel extends Observable
     String theAction = "";
     theState  = State.process;                  // State process
     pn  = productNum.trim();                    // Product no.
-    int   amount  = Integer.valueOf(amountChosen);                         //  & quantity
-    try
-    {
-      if ( theStock.exists( pn ) )              // Stock Exists?
-      {                                         // T
-        Product pr = theStock.getDetails(pn);   //  Get details
-        if ( pr.getQuantity() >= amount )       //  In stock?
-        {                                       //  T
-          theAction =                           //   Display 
-            String.format( "%s : %7.2f (%2d) ", //
-              pr.getDescription(),              //    description
-              pr.getPrice(),                    //    price
-              pr.getQuantity() );               //    quantity     
-          theProduct = pr;                      //   Remember prod.
-          theProduct.setQuantity( amount );     //    & quantity
-          theState = State.checked;             //   OK await BUY 
-        } else {                                //  F
-          theAction =                           //   Not in Stock
-                  pr.getDescription() +               //    product not
-                  " only " + pr.getQuantity() + " left in stock!";         }
-      } else {                                  // F Stock exists
-        theAction =                             //  Unknown
-          "Unknown product number " + pn;       //  product no.
-      }
-    } catch( StockException e )
-    {
-      DEBUG.error( "%s\n%s", 
-            "CashierModel.doCheck", e.getMessage() );
-      theAction = e.getMessage();
+    int amount;
+    if (variableValidator.TestVariable.validIntForStock(amountChosen)) {
+    	amount = Integer.valueOf(amountChosen); 
+    	 try
+    	    {
+    	      if ( theStock.exists( pn ) )              // Stock Exists?
+    	      {                                         // T
+    	        Product pr = theStock.getDetails(pn);   //  Get details
+    	        if ( pr.getQuantity() >= amount )       //  In stock?
+    	        {                                       //  T
+    	          theAction =                           //   Display 
+    	            String.format( "%s : %7.2f (%2d) ", //
+    	              pr.getDescription(),              //    description
+    	              pr.getPrice(),                    //    price
+    	              pr.getQuantity() );               //    quantity     
+    	          theProduct = pr;                      //   Remember prod.
+    	          theProduct.setQuantity( amount );     //    & quantity
+    	          theState = State.checked;             //   OK await BUY 
+    	        } else {                                //  F
+    	          theAction =                           //   Not in Stock
+    	                  pr.getDescription() +               //    product not
+    	                  " only " + pr.getQuantity() + " left in stock!";         }
+    	      } else {                                  // F Stock exists
+    	        theAction =                             //  Unknown
+    	          "Unknown product number " + pn;       //  product no.
+    	      }
+    	    } catch( StockException e )
+    	    {
+    	      DEBUG.error( "%s\n%s", 
+    	            "CashierModel.doCheck", e.getMessage() );
+    	      theAction = e.getMessage();
+    	    }
+    } else {
+    	amount = 1;
+    	theAction = "Not a valid quantity!";
     }
+    
+   
     setChanged(); notifyObservers(theAction);
   }
 

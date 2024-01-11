@@ -63,43 +63,52 @@ public class CustomerModel extends Observable
   {
     theBasket.clear();                          // Clear s. list
     String theAction = "";
-    pn  = productNum.trim();                    // Product no.
-    int amount = Integer.valueOf(amountChosen);
-    try
-    {
-      if ( theStock.exists( pn ) )              // Stock Exists?
-      {                                         // T
-        Product pr = theStock.getDetails( pn ); //  Product
-        if ( pr.getQuantity() >= amount )       //  In stock?
-        { 
-          theAction =                           //   Display 
-            String.format( "%s : %7.2f (%2d) ", //
-              pr.getDescription(),              //    description
-              pr.getPrice(),                    //    price
-              pr.getQuantity() );               //    quantity
-          pr.setQuantity( amount );             //   Require 1
-          theBasket.add( pr );                  //   Add to basket
-          thePic = theStock.getImage( pn );     //    product
-          PlaySound.playSound(Sound.Confirmation);
+    pn  = productNum.trim();  
+    int amount;
+    if (variableValidator.TestVariable.validIntForStock(amountChosen)) {
+    	amount = Integer.valueOf(amountChosen);
+        try
+        //The code if the test works...
+        {
+          if ( theStock.exists( pn ) )              // Stock Exists?
+          {                                         // T
+            Product pr = theStock.getDetails( pn ); //  Product
+            if ( pr.getQuantity() >= amount )       //  In stock?
+            { 
+              theAction =                           //   Display 
+                String.format( "%s : %7.2f (%2d) ", //
+                  pr.getDescription(),              //    description
+                  pr.getPrice(),                    //    price
+                  pr.getQuantity() );               //    quantity
+              pr.setQuantity( amount );             //   Require 1
+              theBasket.add( pr );                  //   Add to basket
+              thePic = theStock.getImage( pn );     //    product
+              PlaySound.playSound(Sound.Confirmation);
 
-        } else {                                //  F
-          theAction =                           //   Inform
-            pr.getDescription() +               //    product not
-            " only " + pr.getQuantity() + " left in stock!"; 
-      		PlaySound.playSound(Sound.Click);
-//    in stock
+            } else {                                //  F
+              theAction =                           //   Inform
+                pr.getDescription() +               //    product not
+                " only " + pr.getQuantity() + " left in stock!"; 
+          		PlaySound.playSound(Sound.Click);
+//        in stock
+            }
+          } else {                                  // F
+            theAction =                             //  Inform Unknown
+              "Unknown product number " + pn; 
+      		  PlaySound.playSound(Sound.Click);
+    //  product number
+          }
+        } catch( StockException e )
+        {
+          DEBUG.error("CustomerClient.doCheck()\n%s",
+          e.getMessage() );
         }
-      } else {                                  // F
-        theAction =                             //  Inform Unknown
-          "Unknown product number " + pn; 
-  		  PlaySound.playSound(Sound.Click);
-//  product number
-      }
-    } catch( StockException e )
-    {
-      DEBUG.error("CustomerClient.doCheck()\n%s",
-      e.getMessage() );
+    } else {
+    	amount = 1;
+    	theAction = "Not a valid quantity!";
     }
+    
+
     setChanged(); notifyObservers(theAction);
   }
 
